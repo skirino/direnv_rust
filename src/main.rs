@@ -23,7 +23,7 @@ fn split_undo_and_kept<'a>(stack: &'a Stack, current_dir: &Path) -> (&'a [Entry]
 fn merge_undoes(undo: &[Entry], var_changes: &mut VarsMap) -> () {
     for entry in undo.iter().rev() {
         if entry.allowed {
-            output::log_green(&format!("direnv_rust: Unloaded '{}'.\n", Path::new(&entry.dir).join(".env").display()));
+            output::log_green(&format!("Unloaded '{}'.", Path::new(&entry.dir).join(".env").display()));
             for (key, val) in &entry.before {
                 var_changes.insert(key.clone(), val.clone());
             }
@@ -129,11 +129,11 @@ fn load(current_dir: &Path) -> () {
     // output
     if !var_changes.is_empty() {
         for (k, o) in &var_changes {
-            output::print_instruction_with_log(k, o);
+            output::print_shell_command_with_log(k, o);
         }
     }
     let direnv_var = stack::encode(&new_stack);
-    output::print_instruction_without_log(DIRENV_RUST, &Some(direnv_var));
+    output::print_shell_command_without_log(DIRENV_RUST, &Some(direnv_var));
 }
 
 fn mark_as_allowed(dir: &Path) -> () {

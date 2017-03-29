@@ -18,10 +18,10 @@ pub fn read(dir: &PathBuf) -> io::Result<(PathBuf, bool, VarChangesVec)> {
     let path = dir.join(".env");
     let content = read_content(&path)?;
     if is_allowed(&path, &content) {
-        output::log_green(&format!("direnv_rust: Loaded '{}'.\n", path.display()));
+        output::log_green(&format!("Loaded '{}'.", path.display()));
         Ok((dir.clone(), true, parse_content(&content)))
     } else {
-        output::log_red(&format!("direnv_rust: Cannot load '{}' as it's not explicitly allowed. Look into the file content and if OK run `$ direnv_rust allow`.\n", path.display()));
+        output::log_red(&format!("Cannot load '{}' as it's not explicitly allowed. Look into the file content and if OK run `$ direnv_rust allow`.", path.display()));
         Ok((dir.clone(), false, Vec::new()))
     }
 }
