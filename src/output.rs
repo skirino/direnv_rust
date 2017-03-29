@@ -8,7 +8,7 @@ pub fn print_instruction_without_log(k: &str, o: &Option<String>) -> () {
 pub fn print_instruction_with_log(k: &str, o: &Option<String>) -> () {
     let s = make_instruction(k, o);
     println!("{}", s);
-    log_green(&("direnv_rust: ".to_string() + &s + "\n"))
+    log_green(&("direnv_rust: $ ".to_string() + &s + "\n"))
 }
 
 fn make_instruction(k: &str, o: &Option<String>) -> String {

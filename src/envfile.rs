@@ -41,21 +41,18 @@ fn parse_content(content: &str) -> VarChangesVec {
 }
 
 fn parse_line(l: &str) -> Option<(String, VarChange)> {
-    let v = l.split_whitespace().filter(|s| !s.is_empty()).collect::<Vec<&str>>();
-    match v.len() {
-        2 =>
-            match v[0] {
-                "unset" => Some((v[1].to_string(), VarChange::Unset)),
-                _       => None,
-            },
-        3 =>
-            match v[0] {
-                "set"     => Some((v[1].to_string(), VarChange::Set(v[2].to_string()))),
-                "append"  => Some((v[1].to_string(), VarChange::Append(v[2].to_string()))),
-                "prepend" => Some((v[1].to_string(), VarChange::Prepend(v[2].to_string()))),
-                _         => None,
-            },
-        _ => None,
+    let v1 = l.splitn(2, ' ').collect::<Vec<&str>>();
+    if v1.len() == 2 {
+        let v2 = v1[1].trim_left().splitn(2, ' ').collect::<Vec<&str>>();
+        match (v1[0], v2.len()) {
+            ("unset"  , 1) => Some((v2[0].to_string(), VarChange::Unset)),
+            ("set"    , 2) => Some((v2[0].to_string(), VarChange::Set(v2[1].trim_left().to_string()))),
+            ("append" , 2) => Some((v2[0].to_string(), VarChange::Append(v2[1].trim_left().to_string()))),
+            ("prepend", 2) => Some((v2[0].to_string(), VarChange::Prepend(v2[1].trim_left().to_string()))),
+            _              => None,
+        }
+    } else {
+        None
     }
 }
 
